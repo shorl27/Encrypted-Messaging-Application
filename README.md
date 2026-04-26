@@ -1,46 +1,18 @@
-import socket
-import threading
+🔐 Encrypted Chat Application (Python)
+📌 Overview
 
+This project is a simple peer-to-peer chat application built using Python sockets and threading. It demonstrates how two systems can communicate over a network in real time.
 
-import  rsa
+The project is designed as a foundation for secure communication, with initial integration of RSA encryption for future enhancements.
 
-public_key, private_key = rsa.newkeys(1024)
-public_partner = None
-
-
-choice = input("Do you want to host [1] or to connect [2]: ")
-
-if choice == "1":
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(("0.0.0.0", 9999))  
-    server.listen()
-
-    print("Waiting for connection...")
-    client, _ = server.accept()
-    print("Connected!")
-
-elif choice == "2":
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(("192.168.100.84", 9999))
-    print("Connected to server!")
-
-else:
-    exit()
-
-
-def send_messages(c):
-    while True:
-        message = input()
-        c.send(message.encode())
-        print("You:", message)
-
-
-def receive_messages(c):
-    while True:
-        message = c.recv(1024).decode()
-        print("Partner:", message)
-
-
-
-threading.Thread(target=send_messages, args=(client,)).start()
-threading.Thread(target=receive_messages, args=(client,)).start()
+🎯 Features
+Real-time messaging between two users
+Client–server architecture
+Multi-threaded communication (send & receive simultaneously)
+RSA key generation (for upcoming encryption support)
+🧠 What This Project Teaches
+Network programming using Python sockets
+TCP client-server communication
+Multi-threading for concurrent tasks
+Basics of secure communication concepts
+Foundations of public-key cryptography (RSA)
