@@ -1,35 +1,46 @@
-🔐 Encrypted Chat Application (Python)
-📌 Overview
+import socket
+import threading
 
-This project is a simple peer-to-peer chat application built using Python sockets and threading. It demonstrates how two systems can communicate over a network in real time.
 
-The project is designed as a foundation for secure communication, with initial integration of RSA encryption for future enhancements.
+import  rsa
 
-🎯 Features
-Real-time messaging between two users
-Client–server architecture
-Multi-threaded communication (send & receive simultaneously)
-RSA key generation (for upcoming encryption support)
-🧠 What This Project Teaches
-Network programming using Python sockets
-TCP client-server communication
-Multi-threading for concurrent tasks
-Basics of secure communication concepts
-Foundations of public-key cryptography (RSA)
+public_key, private_key = rsa.newkeys(1024)
+public_partner = None
 
-🔐 Security Note
 
-This project currently sends messages in plain text. While RSA keys are generated, encryption is not yet implemented.
+choice = input("Do you want to host [1] or to connect [2]: ")
 
-This is intentional for learning purposes.
+if choice == "1":
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind(("0.0.0.0", 9999))  
+    server.listen()
 
-🚀 Future Improvements
-Implement full RSA encryption for messages
-Add a secure key exchange mechanism
-Build a GUI interface
-Support multiple clients
-Add message authentication
-⚠️ Disclaimer
+    print("Waiting for connection...")
+    client, _ = server.accept()
+    print("Connected!")
 
-This project is for educational purposes only.
-Do not use it for transmitting sensitive information without proper encryption.
+elif choice == "2":
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect(("192.168.100.84", 9999))
+    print("Connected to server!")
+
+else:
+    exit()
+
+
+def send_messages(c):
+    while True:
+        message = input()
+        c.send(message.encode())
+        print("You:", message)
+
+
+def receive_messages(c):
+    while True:
+        message = c.recv(1024).decode()
+        print("Partner:", message)
+
+
+
+threading.Thread(target=send_messages, args=(client,)).start()
+threading.Thread(target=receive_messages, args=(client,)).start()
