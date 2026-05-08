@@ -21,7 +21,7 @@ if choice == "1":
 
 elif choice == "2":
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(("192.168.100.84", 9999))
+    client.connect(("180.150.27.19", 9999))
     print("Connected to server!")
 
 else:
